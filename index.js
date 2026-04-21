@@ -31,3 +31,19 @@ closeBtn.addEventListener('click', () => {
 for (const fieldSet of fieldSets) {
     fieldSet.appendChild(closeBtn);
 }
+
+const overlay = document.querySelector('.overlay');
+document.querySelector('.submit-button').addEventListener('click', (event) => {
+    event.preventDefault();
+    overlay.classList.remove('hidden');
+})
+
+document.querySelector('.modal-close').addEventListener('click', () => {
+  overlay.classList.add('hidden');
+});
+
+overlay.addEventListener('click', (event) => {
+  if (event.target === overlay) {
+    overlay.classList.add('hidden');
+  }
+});
