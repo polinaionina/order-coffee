@@ -16,3 +16,18 @@ document.querySelector('.add-button').addEventListener('click', () => {
     const addButtonDiv = document.querySelector('.add-button').parentElement;
     addButtonDiv.before(beverage);
 })
+
+let fieldSets = document.querySelectorAll('fieldset');
+
+const closeBtn = document.createElement('div');
+closeBtn.id = 'close-btn';
+closeBtn.textContent = '\u2717';
+
+closeBtn.addEventListener('click', () => {
+    const parent = closeBtn.parentElement;
+    parent.remove();
+})
+
+for (const fieldSet of fieldSets) {
+    fieldSet.appendChild(closeBtn);
+}

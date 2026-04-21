@@ -45,3 +45,14 @@
     border-radius: 5px;
 }
 
+.beverage {
+    position: relative;
+}
+
+
+#close-btn {
+    color: red;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
