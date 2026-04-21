@@ -88,3 +88,20 @@
   font-size: 18px;
   cursor: pointer;
 }
+
+.note-wrapper {
+    display: flex;
+    gap: 15px;
+    margin-top: 5px;
+}
+
+textarea {
+    width: 200px;
+    resize: vertical;
+}
+
+.note-preview {
+    flex: 1;
+    font-size: 14px;
+    color: #333;
+}

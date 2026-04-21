@@ -15,6 +15,7 @@ document.querySelector('.add-button').addEventListener('click', () => {
     const addButtonDiv = document.querySelector('.add-button').parentElement;
     addButtonDiv.before(beverage);
     beverage.appendChild(createCloseBtn());
+    initTextarea(beverage);
 });
 
 function createCloseBtn() {
@@ -75,6 +76,7 @@ document.querySelector('.submit-button').addEventListener('click', (event) => {
                 <th>Напиток</th>
                 <th>Молоко</th>
                 <th>Дополнительно</th>
+                <th>Пожелание</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -131,3 +133,49 @@ document.querySelector('.order-btn').addEventListener('click', () => {
     timeInput.style.border = '';
     overlay.classList.add('hidden');
 });
+
+const urgentWords = ['срочно', 'быстрее', 'побыстрее', 'скорее', 'поскорее', 'очень нужно'];
+
+function initTextarea(fieldset) {
+    const textarea = fieldset.querySelector('textarea');
+    const preview = fieldset.querySelector('.note-preview');
+
+    textarea.addEventListener('input', () => {
+        const text = textarea.value;
+
+        preview.textContent = '';
+
+        let currentIndex = 0;
+        const regex = new RegExp(`(${urgentWords.join('|')})`, 'gi');
+
+        let match;
+
+        while ((match = regex.exec(text)) !== null) {
+            if (match.index > currentIndex) {
+                preview.appendChild(
+                    document.createTextNode(text.slice(currentIndex, match.index))
+                );
+            }
+
+            const bold = document.createElement('b');
+            bold.textContent = match[0];
+            preview.appendChild(bold);
+
+            currentIndex = regex.lastIndex;
+        }
+
+        if (currentIndex < text.length) {
+            preview.appendChild(
+                document.createTextNode(text.slice(currentIndex))
+            );
+        }
+    });
+}
+
+
+let fieldSets = document.querySelectorAll('fieldset');
+
+for (const fieldSet of fieldSets) {
+    fieldSet.appendChild(createCloseBtn());
+    initTextarea(fieldSet);
+}
