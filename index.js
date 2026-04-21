@@ -8,7 +8,6 @@ document.querySelector('.add-button').addEventListener('click', () => {
         radio.name = `milk-${countDrinks}`;
         radio.checked = radio.value === 'usual';
     });
-
     beverage.querySelectorAll('input[type="checkbox"]').forEach(cb => {
         cb.checked = false;
     });
@@ -16,9 +15,7 @@ document.querySelector('.add-button').addEventListener('click', () => {
     const addButtonDiv = document.querySelector('.add-button').parentElement;
     addButtonDiv.before(beverage);
     beverage.appendChild(createCloseBtn());
-})
-
-let fieldSets = document.querySelectorAll('fieldset');
+});
 
 function createCloseBtn() {
     const btn = document.createElement('div');
@@ -30,25 +27,29 @@ function createCloseBtn() {
     return btn;
 }
 
-for (const fieldSet of fieldSets) {
+document.querySelectorAll('fieldset').forEach(fieldSet => {
     fieldSet.appendChild(createCloseBtn());
-}
-
-const overlay = document.querySelector('.overlay');
-document.querySelector('.submit-button').addEventListener('click', (event) => {
-    event.preventDefault();
-    overlay.classList.remove('hidden');
-})
-
-document.querySelector('.modal-close').addEventListener('click', () => {
-  overlay.classList.add('hidden');
 });
 
-overlay.addEventListener('click', (event) => {
-  if (event.target === overlay) {
-    overlay.classList.add('hidden');
-  }
-});
+const drinkNames = {
+    espresso: 'Эспрессо',
+    capuccino: 'Капучино',
+    cacao: 'Какао',
+};
+
+const milkNames = {
+    usual: 'обычное',
+    'no-fat': 'обезжиренное',
+    soy: 'соевое',
+    coconut: 'кокосовое',
+};
+
+const optionNames = {
+    'whipped cream': 'взбитые сливки',
+    marshmallow: 'зефирки',
+    chocolate: 'шоколад',
+    cinnamon: 'корица',
+};
 
 function getDrinkWord(n) {
     const abs = Math.abs(n) % 100;
@@ -59,9 +60,52 @@ function getDrinkWord(n) {
     return 'напитков';
 }
 
+const overlay = document.querySelector('.overlay');
+
 document.querySelector('.submit-button').addEventListener('click', (event) => {
     event.preventDefault();
+
     const count = document.querySelectorAll('fieldset').length;
     document.querySelector('.modal p').textContent = `Вы заказали ${count} ${getDrinkWord(count)}`;
+
+    const table = document.querySelector('.ready_table');
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>Напиток</th>
+                <th>Молоко</th>
+                <th>Дополнительно</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    `;
+    const tbody = table.querySelector('tbody');
+
+    document.querySelectorAll('.beverage').forEach(fieldset => {
+        const selectValue = fieldset.querySelector('select').value;
+        const drink = drinkNames[selectValue] || selectValue;
+
+        const milkRadio = fieldset.querySelector('input[type="radio"]:checked');
+        const milk = milkRadio ? (milkNames[milkRadio.value] || milkRadio.value) : '—';
+
+        const checkedOptions = [...fieldset.querySelectorAll('input[type="checkbox"]:checked')]
+            .map(cb => optionNames[cb.value] || cb.value);
+        const options = checkedOptions.length ? checkedOptions.join(', ') : '—';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${drink}</td><td>${milk}</td><td>${options}</td>`;
+        tbody.appendChild(tr);
+    });
+
     overlay.classList.remove('hidden');
+});
+
+document.querySelector('.modal-close').addEventListener('click', () => {
+    overlay.classList.add('hidden');
+});
+
+overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) {
+        overlay.classList.add('hidden');
+    }
 });
