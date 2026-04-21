@@ -94,8 +94,16 @@ document.querySelector('.submit-button').addEventListener('click', (event) => {
             .map(cb => optionNames[cb.value] || cb.value);
         const options = checkedOptions.length ? checkedOptions.join(', ') : '—';
 
+        const note = fieldset.querySelector('textarea')?.value || '—';
+
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${drink}</td><td>${milk}</td><td>${options}</td>`;
+        tr.innerHTML = `
+            <td>${drink}</td>
+            <td>${milk}</td>
+            <td>${options}</td>
+            <td>${note}</td>
+        `;
+        
         tbody.appendChild(tr);
     });
 
