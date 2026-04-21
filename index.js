@@ -109,3 +109,25 @@ overlay.addEventListener('click', (event) => {
         overlay.classList.add('hidden');
     }
 });
+
+document.querySelector('.order-btn').addEventListener('click', () => {
+    const timeInput = document.querySelector('.order-time');
+    const value = timeInput.value;
+
+    if (!value) return;
+
+    const now = new Date();
+    const [hours, minutes] = value.split(':').map(Number);
+
+    const selected = new Date();
+    selected.setHours(hours, minutes, 0, 0);
+
+    if (selected < now) {
+        timeInput.style.border = '2px solid red';
+        alert('Мы не умеем перемещаться во времени. Выберите время позже, чем текущее');
+        return;
+    }
+
+    timeInput.style.border = '';
+    overlay.classList.add('hidden');
+});
