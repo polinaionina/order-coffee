@@ -15,21 +15,23 @@ document.querySelector('.add-button').addEventListener('click', () => {
 
     const addButtonDiv = document.querySelector('.add-button').parentElement;
     addButtonDiv.before(beverage);
+    beverage.appendChild(createCloseBtn());
 })
 
 let fieldSets = document.querySelectorAll('fieldset');
 
-const closeBtn = document.createElement('div');
-closeBtn.id = 'close-btn';
-closeBtn.textContent = '\u2717';
-
-closeBtn.addEventListener('click', () => {
-    const parent = closeBtn.parentElement;
-    parent.remove();
-})
+function createCloseBtn() {
+    const btn = document.createElement('div');
+    btn.className = 'close-btn';
+    btn.textContent = '\u2717';
+    btn.addEventListener('click', () => {
+        btn.parentElement.remove();
+    });
+    return btn;
+}
 
 for (const fieldSet of fieldSets) {
-    fieldSet.appendChild(closeBtn);
+    fieldSet.appendChild(createCloseBtn());
 }
 
 const overlay = document.querySelector('.overlay');
@@ -46,4 +48,20 @@ overlay.addEventListener('click', (event) => {
   if (event.target === overlay) {
     overlay.classList.add('hidden');
   }
+});
+
+function getDrinkWord(n) {
+    const abs = Math.abs(n) % 100;
+    const mod10 = abs % 10;
+    if (abs >= 11 && abs <= 19) return 'напитков';
+    if (mod10 === 1) return 'напиток';
+    if (mod10 >= 2 && mod10 <= 4) return 'напитка';
+    return 'напитков';
+}
+
+document.querySelector('.submit-button').addEventListener('click', (event) => {
+    event.preventDefault();
+    const count = document.querySelectorAll('fieldset').length;
+    document.querySelector('.modal p').textContent = `Вы заказали ${count} ${getDrinkWord(count)}`;
+    overlay.classList.remove('hidden');
 });
